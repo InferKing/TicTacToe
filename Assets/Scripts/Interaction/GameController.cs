@@ -18,10 +18,11 @@ public class GameController : MonoBehaviour
     [SerializeField] private ButtonBehaviour but;
     private (string, string) s;
 
-    void Start ()
+    void Start()
     {
         manager = new GameManager();
         manager.onCellUpdated += UpdateField;
+        but.Show(manager.GetTurn());
         StartCoroutine(GameLoop());
     }
     private void UpdateField (int col, int row, CellType type) {
@@ -37,6 +38,7 @@ public class GameController : MonoBehaviour
             if (s.Item1 == "-1" || !manager.Znach(cell.col,cell.row,value)) continue;
             but.RemoveButton(int.Parse(s.Item2));
             manager.NextAction(new GameAction(cell.col, cell.row), value);
+            but.Show(manager.GetTurn());
             yield return null;
         }
         gameOverObject.SetActive(true);
